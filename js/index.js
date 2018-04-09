@@ -1,9 +1,9 @@
 class Game {
   constructor () {
     // Model
-    this.fps = 100
-    this.sizeX = 60
-    this.sizeY = 40
+    this.fps = 50
+    this.sizeX = 75
+    this.sizeY = 45
     this.generations = 0
     this.paused = false
     this.matrix = this._createMatrix(this.sizeX, this.sizeY)
@@ -12,14 +12,17 @@ class Game {
     // View
     this.canvas = document.getElementById('canvas')
     this.ctx = this.canvas.getContext('2d')
-    this.tileWidth = 10
+    this.tileWidth = 12
     this.tileColor = '#5f8'
     this.backgroundColor = '#333'
+    this.mouseX = 0
+    this.mouseY = 0
 
     // Buttons
     this.buttons = {
       pause: document.getElementById('pause'),
-      randomize: document.getElementById('randomize')
+      randomize: document.getElementById('randomize'),
+      clear: document.getElementById('clear')
     }
 
     this._frame = this._frame.bind(this)
@@ -30,6 +33,17 @@ class Game {
     this._resizeCanvas()
     document.addEventListener('resize', this._resizeCanvas)
 
+    // Mouse events
+    this.canvas.addEventListener('mousemove', e => {
+      this.mouseX = Math.floor((e.x - this.canvas.offsetLeft) / this.tileWidth)
+      this.mouseY = Math.floor((e.y - this.canvas.offsetTop + window.pageYOffset) / this.tileWidth)
+    })
+
+    this.canvas.addEventListener('mousedown', e => {
+      this.matrix[this.mouseX][this.mouseY] = 1
+      this._drawSquare(this.mouseX, this.mouseY, this.tileWidth, this.tileColor)
+    })
+
     // Init buttons
     this.buttons.pause.onclick = () => {
       this.paused = !this.paused
@@ -38,6 +52,10 @@ class Game {
 
     this.buttons.randomize.onclick = () => {
       this.randomizeCells()
+    }
+
+    this.buttons.clear.onclick = () => {
+      this.matrix = this._createMatrix(this.sizeX, this.sizeY)
     }
 
     setInterval(this._frame, this.fps)
@@ -54,8 +72,8 @@ class Game {
 
   // Calculate and draw one game frame (one generation)
   _frame () {
+    this._drawFrame()
     if (!this.paused) {
-      this._drawFrame()
       this._updateGeneration()
       this.matrix = this.nextMatrix
       this.nextMatrix = this._createMatrix(this.sizeX, this.sizeY)
@@ -72,6 +90,11 @@ class Game {
         }
       }
     }
+    this._drawMouse()
+  }
+
+  _drawMouse () {
+    this._drawSquare(this.mouseX, this.mouseY, this.tileWidth, '#fff')
   }
 
   _drawSquare (x, y, a, color) {

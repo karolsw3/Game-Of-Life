@@ -8,7 +8,8 @@ body, html {
 }
 
 canvas {
-  margin: 0 auto;
+  margin: 10px auto 0 auto;
+  display: block;
 }
 
 .buttons {
@@ -19,6 +20,7 @@ canvas {
 }
 
 button {
+  min-width: 130px; 
   padding: 10px 20px;
   margin: 10px;
   background: #5f8;
