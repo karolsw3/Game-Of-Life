@@ -5,6 +5,7 @@ class Game {
     this.sizeX = 60
     this.sizeY = 40
     this.generations = 0
+    this.paused = false
     this.matrix = this._createMatrix(this.sizeX, this.sizeY)
     this.nextMatrix = this._createMatrix(this.sizeX, this.sizeY)
 
@@ -12,6 +13,14 @@ class Game {
     this.canvas = document.getElementById('canvas')
     this.ctx = this.canvas.getContext('2d')
     this.tileWidth = 10
+    this.tileColor = '#5f8'
+    this.backgroundColor = '#333'
+
+    // Buttons
+    this.buttons = {
+      pause: document.getElementById('pause'),
+      randomize: document.getElementById('randomize')
+    }
 
     this._frame = this._frame.bind(this)
   }
@@ -19,6 +28,18 @@ class Game {
   // Initialize the game
   init () {
     this._resizeCanvas()
+    document.addEventListener('resize', this._resizeCanvas)
+
+    // Init buttons
+    this.buttons.pause.onclick = () => {
+      this.paused = !this.paused
+      this.buttons.pause.innerText = (this.paused ? 'Resume':'Pause')
+    }
+
+    this.buttons.randomize.onclick = () => {
+      this.randomizeCells()
+    }
+
     setInterval(this._frame, this.fps)
   }
 
@@ -33,19 +54,21 @@ class Game {
 
   // Calculate and draw one game frame (one generation)
   _frame () {
-    this._drawFrame()
-    this._updateGeneration()
-    this.matrix = this.nextMatrix
-    this.nextMatrix = this._createMatrix(this.sizeX, this.sizeY)
+    if (!this.paused) {
+      this._drawFrame()
+      this._updateGeneration()
+      this.matrix = this.nextMatrix
+      this.nextMatrix = this._createMatrix(this.sizeX, this.sizeY)
+    }
   }
 
   // Draw generation matrixes on canvas
   _drawFrame () {
-    this._drawBackground('#aaa')
+    this._drawBackground(this.backgroundColor)
     for (let x = 0; x < this.matrix.length; x++) {
       for (let y = 0; y < this.matrix[x].length; y++) {
         if (this.matrix[x][y] === 1) {
-          this._drawSquare(x, y, this.tileWidth, 'black')
+          this._drawSquare(x, y, this.tileWidth, this.tileColor)
         }
       }
     }
@@ -108,4 +131,3 @@ class Game {
 
 var game = new Game()
 game.init()
-game.randomizeCells()
