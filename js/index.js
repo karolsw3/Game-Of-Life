@@ -2,8 +2,8 @@ class Game {
   constructor () {
     // Model
     this.frameCount = 0
-    this.sizeX = 75
-    this.sizeY = 45
+    this.sizeX = 0
+    this.sizeY = 0
     this.generations = 0
     this.paused = false
     this.matrix = this._createMatrix(this.sizeX, this.sizeY)
@@ -12,9 +12,9 @@ class Game {
     // View
     this.canvas = document.getElementById('canvas')
     this.ctx = this.canvas.getContext('2d')
-    this.tileWidth = 12
+    this.tileWidth = 11
     this.tileColor = '#5f8'
-    this.backgroundColor = '#333'
+    this.backgroundColor = '#093a3e'
     this.mouseX = 0
     this.mouseY = 0
 
@@ -114,8 +114,10 @@ class Game {
   }
 
   _resizeCanvas () {
-    this.canvas.width = this.sizeX * this.tileWidth
-    this.canvas.height = this.sizeY * this.tileWidth
+    this.canvas.width = window.innerWidth
+    this.canvas.height = window.innerHeight - 60
+    this.sizeX = Math.round(this.canvas.width / this.tileWidth)
+    this.sizeY = Math.round(this.canvas.height / this.tileWidth)
   }
 
   /**

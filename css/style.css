@@ -3,32 +3,37 @@
 body, html {
   margin: 0;
   padding: 0;
-  background: black;
+  background: #001011;
   font-family: 'Roboto', sans-serif;
 }
 
 canvas {
-  margin: 10px auto 0 auto;
+  margin: 0 auto;
   display: block;
 }
 
 .buttons {
+  position: absolute;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  bottom: 0;
+  background: #202020;
+  border-top: 4px solid #373737
 }
 
 button {
   min-width: 130px; 
-  padding: 10px 20px;
+  padding: 8px 20px;
   margin: 10px;
   background: #5f8;
   color: #222;
-  font-size: 1.1em;
+  font-size: 1em;
   border: none;
   cursor: pointer;
   transition-duration: 0.13s;
+  border-radius: 2px;
 }
 
 button:hover {
