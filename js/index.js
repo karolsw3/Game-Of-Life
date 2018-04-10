@@ -1,7 +1,7 @@
 class Game {
   constructor () {
     // Model
-    this.fps = 50
+    this.frameCount = 0
     this.sizeX = 75
     this.sizeY = 45
     this.generations = 0
@@ -47,7 +47,7 @@ class Game {
     // Init buttons
     this.buttons.pause.onclick = () => {
       this.paused = !this.paused
-      this.buttons.pause.innerText = (this.paused ? 'Resume':'Pause')
+      this.buttons.pause.innerText = (this.paused ? 'Resume' : 'Pause')
     }
 
     this.buttons.randomize.onclick = () => {
@@ -58,7 +58,7 @@ class Game {
       this.matrix = this._createMatrix(this.sizeX, this.sizeY)
     }
 
-    setInterval(this._frame, this.fps)
+    requestAnimationFrame(this._frame)
   }
 
   // Fills generation matrix with random cells (empty or full)
@@ -74,10 +74,14 @@ class Game {
   _frame () {
     this._drawFrame()
     if (!this.paused) {
-      this._updateGeneration()
-      this.matrix = this.nextMatrix
-      this.nextMatrix = this._createMatrix(this.sizeX, this.sizeY)
+      if (this.frameCount % 4 === 0) {
+        this._updateGeneration()
+        this.matrix = this.nextMatrix
+        this.nextMatrix = this._createMatrix(this.sizeX, this.sizeY)
+      }
     }
+    this.frameCount++
+    requestAnimationFrame(this._frame)
   }
 
   // Draw generation matrixes on canvas
