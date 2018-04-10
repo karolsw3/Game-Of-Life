@@ -48,7 +48,7 @@ class Game {
     // Init buttons
     this.buttons.pause.onclick = () => {
       this.paused = !this.paused
-      this.buttons.pause.innerText = (this.paused ? 'Resume' : 'Pause')
+      this.buttons.pause.innerText = (this.paused ? 'Resume 🔥' : 'Pause ⛔')
     }
 
     this.buttons.randomize.onclick = () => {
