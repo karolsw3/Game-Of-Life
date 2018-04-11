@@ -8,8 +8,8 @@ body, html {
 }
 
 canvas {
-  margin: 0 auto;
-  display: block;
+  position: absolute;
+  top: 0;
 }
 
 .buttons {
@@ -21,6 +21,19 @@ canvas {
   bottom: 0;
   background: #202020;
   border-top: 4px solid #373737
+}
+
+.game {
+  margin: 0 auto;
+  position: relative;
+}
+
+.game #backgroundCanvas {
+  z-index: 1;
+}
+
+.game #canvas {
+  z-index: 2;
 }
 
 button {

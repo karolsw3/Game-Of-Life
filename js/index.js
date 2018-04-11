@@ -10,10 +10,13 @@ class Game {
     this.nextMatrix = this._createMatrix()
 
     // View
+    this.backgroundCanvas = document.getElementById('backgroundCanvas')
     this.canvas = document.getElementById('canvas')
+    this.backgroundCtx = this.backgroundCanvas.getContext('2d')
     this.ctx = this.canvas.getContext('2d')
-    this.tileWidth = 12
+    this.tileWidth = 13
     this.tileColor = '#5f8'
+    this.deathTileColor = '#0b2313'
     this.backgroundColor = '#001011'
     this.mouseX = 0
     this.mouseY = 0
@@ -33,6 +36,7 @@ class Game {
   init () {
     this.frameCount = 0
     this._resizeCanvas()
+    this._drawBackground(this.backgroundColor)
     window.addEventListener('resize', this._resizeCanvas)
 
     // Mouse events
@@ -54,10 +58,12 @@ class Game {
 
     this.buttons.randomize.onclick = () => {
       this.randomizeCells()
+      this._drawBackground(this.backgroundColor)
     }
 
     this.buttons.clear.onclick = () => {
       this.matrix = this._createMatrix()
+      this._drawBackground(this.backgroundColor)
     }
 
     requestAnimationFrame(this._frame)
@@ -67,7 +73,7 @@ class Game {
   randomizeCells () {
     for (let x = 0; x < this.sizeX; x++) {
       for (let y = 0; y < this.sizeY; y++) {
-        this.matrix[x][y] = Math.round(Math.random())
+        this.matrix[x][y] = Math.round(Math.random() / 1.5)
       }
     }
   }
@@ -88,10 +94,13 @@ class Game {
 
   // Draw generation matrixes on canvas
   _drawFrame () {
-    this._drawBackground(this.backgroundColor)
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     for (let x = 0; x < this.sizeX; x++) {
       for (let y = 0; y < this.sizeY; y++) {
-        if (this.matrix[x][y] === 1) {
+        if (this.matrix[x][y] === -1) {
+          this._drawBackgroundSquare(x, y, this.tileWidth, this.deathTileColor)
+          this.matrix[x][y] = 0
+        } else if (this.matrix[x][y] === 1) {
           this._drawSquare(x, y, this.tileWidth, this.tileColor)
         }
       }
@@ -103,21 +112,30 @@ class Game {
     this._drawSquare(this.mouseX, this.mouseY, this.tileWidth, '#fff')
   }
 
+  _drawBackgroundSquare (x, y, a, color) {
+    this.backgroundCtx.beginPath()
+    this.backgroundCtx.rect(x * a, y * a, a, a)
+    this.backgroundCtx.fillStyle = color
+    this.backgroundCtx.fill()
+  }
+
   _drawSquare (x, y, a, color) {
     this.ctx.beginPath()
     this.ctx.rect(x * a, y * a, a, a)
     this.ctx.fillStyle = color
-    this.ctx.fill()
+    this.ctx.fill()   
   }
 
   _drawBackground (color) {
-    this.ctx.fillStyle = color
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+    this.backgroundCtx.fillStyle = color
+    this.backgroundCtx.fillRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
   _resizeCanvas () {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight - 60
+    this.backgroundCanvas.width = window.innerWidth
+    this.backgroundCanvas.height = window.innerHeight - 60
     this.sizeX = Math.floor(this.canvas.width / this.tileWidth)
     this.sizeY = Math.floor(this.canvas.height / this.tileWidth)
   }
@@ -131,8 +149,8 @@ class Game {
       for (let y = 0; y < this.sizeY; y++) {
         let neighbours = this._countNeighbours(x, y)
         if (this.matrix[x][y] === 1 && (neighbours > 3 || neighbours < 2)) {
-          this.nextMatrix[x][y] = 0
-        } else if (this.matrix[x][y] === 0 && neighbours === 3) {
+          this.nextMatrix[x][y] = -1
+        } else if (this.matrix[x][y] !== 1 && neighbours === 3) {
           this.nextMatrix[x][y] = 1
         } else {
           this.nextMatrix[x][y] = this.matrix[x][y]
@@ -146,16 +164,18 @@ class Game {
     let neighbours = 0
     for (let x = -1; x < 2; x++) {
       for (let y = -1; y < 2; y++) {
-        neighbours += this.matrix[(cellX + x + this.sizeX) % this.sizeX][(cellY + y + this.sizeY) % this.sizeY]
+        if (this.matrix[(cellX + x + this.sizeX) % this.sizeX][(cellY + y + this.sizeY) % this.sizeY] === 1) {
+          neighbours++
+        }
       }
     }
-    neighbours -= this.matrix[cellX][cellY]
+    neighbours -= (this.matrix[cellX][cellY] === 1 ? 1 : 0)
     return neighbours
   }
 
   // Create matrix with specified width and height and fill it with 0s
   _createMatrix () {
-    let matrix = Array(...Array(300)).map(() => Array(300).fill(0))
+    let matrix = Array(...Array(200)).map(() => Array(200).fill(0))
     return matrix
   }
 }
