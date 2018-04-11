@@ -133,11 +133,11 @@ class Game {
 
   _resizeCanvas () {
     this.canvas.width = window.innerWidth
-    this.canvas.height = window.innerHeight - 60
+    this.canvas.height = window.innerHeight - 55
     this.backgroundCanvas.width = window.innerWidth
-    this.backgroundCanvas.height = window.innerHeight - 60
+    this.backgroundCanvas.height = window.innerHeight - 55
     this.sizeX = Math.floor(this.canvas.width / this.tileWidth)
-    this.sizeY = Math.floor(this.canvas.height / this.tileWidth)
+    this.sizeY = Math.floor(this.canvas.height / this.tileWidth) + 1
   }
 
   /**
