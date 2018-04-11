@@ -12,7 +12,7 @@ class Game {
     // View
     this.canvas = document.getElementById('canvas')
     this.ctx = this.canvas.getContext('2d')
-    this.tileWidth = 11
+    this.tileWidth = 12
     this.tileColor = '#5f8'
     this.backgroundColor = '#001011'
     this.mouseX = 0
@@ -26,6 +26,7 @@ class Game {
     }
 
     this._frame = this._frame.bind(this)
+    this._resizeCanvas = this._resizeCanvas.bind(this)
   }
 
   // Initialize the game
@@ -60,11 +61,6 @@ class Game {
     }
 
     requestAnimationFrame(this._frame)
-  }
-
-  restart () {
-    cancelAnimationFrame(this._frame)
-    this.init()
   }
 
   // Fills generation matrix with random cells (empty or full)
@@ -124,7 +120,6 @@ class Game {
     this.canvas.height = window.innerHeight - 60
     this.sizeX = Math.floor(this.canvas.width / this.tileWidth)
     this.sizeY = Math.floor(this.canvas.height / this.tileWidth)
-    console.log(this.sizeX)
   }
 
   /**
@@ -160,7 +155,7 @@ class Game {
 
   // Create matrix with specified width and height and fill it with 0s
   _createMatrix () {
-    let matrix = Array(...Array(200)).map(() => Array(200).fill(0))
+    let matrix = Array(...Array(300)).map(() => Array(300).fill(0))
     return matrix
   }
 }
