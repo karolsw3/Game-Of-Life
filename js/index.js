@@ -46,7 +46,7 @@ class Game {
     })
 
     this.canvas.addEventListener('mousedown', e => {
-      this.matrix[this.mouseX][this.mouseY] = 1
+      this.matrix[this.mouseX][this.mouseY] = this.matrix[this.mouseX][this.mouseY] === 0 ? 1 : 0
       this._drawSquare(this.mouseX, this.mouseY, this.tileWidth, this.tileColor)
     })
 
