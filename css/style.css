@@ -24,7 +24,7 @@ canvas {
 }
 
 button {
-  min-width: 130px; 
+  min-width: 100px; 
   padding: 8px 20px;
   margin: 10px;
   background: #5f8;
@@ -39,3 +39,9 @@ button {
 button:hover {
   opacity: 0.75;
 }
+
+@media screen and (max-width: 600px) {
+  button {
+    font-size: 0.8em;
+  }
+} 
