@@ -89,7 +89,6 @@ class Game {
         this._updateGeneration()
         this.matrix = this.nextMatrix
         this.nextMatrix = this._createMatrix()
-        this.generationNumber++
         this.counter.innerText = 'Generation: ' + this.generationNumber
       }
     }
@@ -99,6 +98,8 @@ class Game {
 
   // Draw generation matrixes on canvas
   _drawFrame () {
+    
+
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     for (let x = 0; x < this.sizeX; x++) {
       for (let y = 0; y < this.sizeY; y++) {
@@ -150,17 +151,24 @@ class Game {
    *  and put them in the nextMatrix array
    */
   _updateGeneration () {
+    let shouldUpdateGenerationCounter = false
+
     for (let x = 0; x < this.sizeX; x++) {
       for (let y = 0; y < this.sizeY; y++) {
         let neighbours = this._countNeighbours(x, y)
         if (this.matrix[x][y] === 1 && (neighbours > 3 || neighbours < 2)) {
           this.nextMatrix[x][y] = -1
         } else if (this.matrix[x][y] !== 1 && neighbours === 3) {
+          shouldUpdateGenerationCounter = true
           this.nextMatrix[x][y] = 1
         } else {
           this.nextMatrix[x][y] = this.matrix[x][y]
         }
       }
+    }
+
+    if (shouldUpdateGenerationCounter) {
+      this.generationNumber++
     }
   }
 

@@ -46,11 +46,11 @@ canvas {
   box-sizing: border-box;
   color: white;
   text-align: center;
-  text-shadow: 0 0 13px rgba(0, 0, 0, .9) 
+  text-shadow: 0 0 13px rgba(0, 0, 0, .9)
 }
 
 button {
-  min-width: 100px; 
+  min-width: 100px;
   padding: 8px 20px;
   margin: 10px;
   background: #5f8;
