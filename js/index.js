@@ -4,12 +4,13 @@ class Game {
     this.frameCount = 0
     this.sizeX = 0
     this.sizeY = 0
-    this.generations = 0
-    this.paused = false
+    this.generationNumber = 0
+    this.paused = true
     this.matrix = this._createMatrix()
     this.nextMatrix = this._createMatrix()
 
     // View
+    this.counter = document.getElementById('counter')
     this.backgroundCanvas = document.getElementById('backgroundCanvas')
     this.canvas = document.getElementById('canvas')
     this.backgroundCtx = this.backgroundCanvas.getContext('2d')
@@ -53,17 +54,19 @@ class Game {
     // Init buttons
     this.buttons.pause.onclick = () => {
       this.paused = !this.paused
-      this.buttons.pause.innerText = (this.paused ? 'Resume 🔥' : 'Pause ⛔')
+      this.buttons.pause.innerText = (this.paused ? 'Start 🔥' : 'Stop ⛔')
     }
 
     this.buttons.randomize.onclick = () => {
       this.randomizeCells()
       this._drawBackground(this.backgroundColor)
+      this.generationNumber = 0
     }
 
     this.buttons.clear.onclick = () => {
       this.matrix = this._createMatrix()
       this._drawBackground(this.backgroundColor)
+      this.generationNumber = 0
     }
 
     requestAnimationFrame(this._frame)
@@ -86,6 +89,8 @@ class Game {
         this._updateGeneration()
         this.matrix = this.nextMatrix
         this.nextMatrix = this._createMatrix()
+        this.generationNumber++
+        this.counter.innerText = 'Generation: ' + this.generationNumber
       }
     }
     this.frameCount++

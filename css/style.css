@@ -36,6 +36,19 @@ canvas {
   z-index: 2;
 }
 
+.game .counter {
+  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 5px;
+  box-sizing: border-box;
+  color: white;
+  text-align: center;
+  text-shadow: 0 0 13px rgba(0, 0, 0, .9) 
+}
+
 button {
   min-width: 100px; 
   padding: 8px 20px;
